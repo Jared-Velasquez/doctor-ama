@@ -1,8 +1,23 @@
-import { doc, getDoc, exists, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, exists, updateDoc, setDoc } from 'firebase/firestore';
 import {db} from './index.js';
 
-const addUser = async () => {
+const initializeUser = async (userID, userType, specialities) => {
+    await setDoc(doc(db, "Users", userID), {
+        conversationList: [],
+        healthProfile: [],
+        specialities: specialities,
+        type: userType
+    }).catch((error) => {
+        return {
+            status: false,
+            result: "Error in adding user document to Firestore Database"
+        }
+    })
 
+    return {
+        status: true,
+        result: "User was successfully added to Firestore Database and Authentication"
+    }
 }
 
 const getOwnProfile = async (userID) => {
@@ -19,7 +34,7 @@ const getOwnProfile = async (userID) => {
     if (userDoc.exists()) {
         return {
             status: true,
-            result: doc.data().healthProfile
+            result: userDoc.data().healthProfile
         }
     } else {
         return {
@@ -88,4 +103,4 @@ const setProfile = async (userID, profile) => {
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile};
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser};

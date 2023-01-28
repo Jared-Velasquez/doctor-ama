@@ -8,42 +8,30 @@ import {
     updateProfile,
 } from "firebase/auth"
 import { getFirestore , doc, setDoc, query, collection, where, getDocs} from "firebase/firestore"; 
+import { initializeUser } from './database.js';
 
 const db = getFirestore(app);
 
 const auth = getAuth(app);
 
 export async function makeUser(email, password) {
+    let res;
+
     try {
-
-        const repeatEmailCheck = collection(db, "users");
-        const q = query(repeatEmailCheck, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        var emailIsTaken = false;
-        querySnapshot.forEach((doc) => {
-          alert("Email already has account");
-          emailIsTaken = true;
-        });
-        if(emailIsTaken){return false;}
-
-        const res = await createUserWithEmailAndPassword(auth, email, password);
-        const ref = doc(db, "users", res.user.uid);
-        await setDoc(ref, {
-          email: email,
-          ismoderator: false,
-        });
-
-        await updateProfile(auth.currentUser, {
-          displayName: email,
-        });
-      } catch (err) {
-        alert(err.message);
-        return false;
+      res = await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      return {
+        result: false,
+        error: error
       }
-    return true;
+    }
+
+    const result = await initializeUser(res.user.uid, 0, []);
+
+    return result;
 }
 
-export async function signIn (email, password) {
+export async function signInUser(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (err) {
