@@ -6,6 +6,7 @@ import ConversationList from '../../components/ConversationList/ConversationList
 import ProfileEditor from '../../components/ProfileEditor/ProfileEditor';
 import ProfileViewer from '../../components/ProfileViewer/ProfileViewer';
 import {  useNavigate } from "react-router-dom";
+import './Home.css';
 
 import {
     getUserId,
@@ -58,58 +59,66 @@ function Home (props) {
 
 
     return (
-        <Container className="pt-4">
-            <Row><Col><p>User ID is: {uid}</p></Col>
-            <Col><Button variant="danger" className="float-end" onClick={() => {
+        <Container fluid className="pt-4">
+          <div>
+            <img class="monstera3 monstera" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+          </div>
+          <div>
+            <img class="monstera4 monstera" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+          </div>
+          <Row>
+            <Col className='userid'><p>User ID is: {uid}</p></Col>
+            <Col className='logoutbutton'><Button variant="danger" className="float-end" onClick={() => {
                 signOutUser();
                 console.log("API Call made")
                 window.location.reload();
             }}>Log Out</Button>
-</Col></Row>
-            
-        <Row>
-        <Col>
-            {inConvo ? 
+            </Col>
+          </Row>
+          
+          <Row>
+            <Col className='homea'>
+                {inConvo ? 
+                    <Tabs
+                    defaultActiveKey="def"
+                    transition={false}
+                    className="mb-3"
+                  >
+                    <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
+                      <ProfileViewer convoUID={convoUID} />
+                    </Tab>
+                    <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '50vw' }}>
+                      <ProfileEditor uid={uid} />
+                    </Tab>
+                  </Tabs>
+                : 
                 <Tabs
-                defaultActiveKey="def"
-                transition={false}
-                className="mb-3"
-              >
-                <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
-                  <ProfileViewer convoUID={convoUID} />
-                </Tab>
-                <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
+                  defaultActiveKey="def"
+                  transition={false}
+                  className="mb-3"
+                >
+                <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '50vw' }}>
                   <ProfileEditor uid={uid} />
                 </Tab>
-              </Tabs>
-             : 
-             <Tabs
-             defaultActiveKey="def"
-             transition={false}
-             className="mb-3"
-           >
-             <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
-               <ProfileEditor uid={uid} />
-             </Tab>
-           </Tabs>}
-        </Col>
-        <Col>
-            {!inConvo ? 
-                <Tabs
-                defaultActiveKey="convlist"
-                transition={false}
-                className="mb-3"
-              >
-                <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ConversationList uid={uid} entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
-                </Tab>
-                <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
-                  <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct}  />
-                </Tab>
-              </Tabs>
-             : <ChatViewer convoID={convoIDAct} uid={uid} exit={()=>{setInConvo(false)}} />}
-        </Col>
-      </Row>
+              </Tabs>}
+            </Col>
+            <Col className='homeb'>
+              {!inConvo ? 
+                  <Tabs
+                  defaultActiveKey="convlist"
+                  transition={false}
+                  className="mb-3"
+                >
+                  <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
+                    <ConversationList uid={uid} entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
+                  </Tab>
+                  <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
+                    <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct}  />
+                  </Tab>
+                </Tabs>
+              : <ChatViewer convoID={convoIDAct} uid={uid} exit={()=>{setInConvo(false)}} />}
+            </Col>
+          </Row>
         </Container>
     );
 }

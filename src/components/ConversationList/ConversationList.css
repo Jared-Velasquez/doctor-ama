@@ -1,20 +1,35 @@
-.convolist-td img{
+.convolist-overall {
+}
+
+.convolist-tda {
+    width: 40px;
+}
+
+.convolist-tdb {
+    padding-left: 10px;
+}
+
+.convolist-td{
+    text-align: left;
+}
+
+.convolist-td img {
     width: 100px;
     height: 100px;
     border-radius: 20px;
     border: 1px solid black;
     background: linear-gradient(45deg, #f5ccd0, #78bfa1);
     margin: 10px;
-    text-align: right;
 
 }
 
 .convolist-entry {
     background: rgba(128, 128, 128, 0.487);
     margin: 10px;
-    width: 100%;
+    margin-right: 10px;
+    width: 90%;
     border-radius: 10px;
-    padding-right: 20px;
-    text-align: left;
+    padding-right: 10px;
     cursor: pointer; 
+    text-align: left;
 }

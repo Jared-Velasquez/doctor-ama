@@ -68,10 +68,10 @@ function ConversationList (props) {
                         <table class="convolist-entry" onClick={async () => {
                             props.setConvoIDAct(convo.conversationID); await markRead(convo.conversationID, props.uid); props.entry()}}>
                             <tr>
-                                <td class="convolist-td">
+                                <td class="convolist-td convolist-tda">
                                     <img src={convo.icon} class="convolist-image"/>
                                 </td>
-                                <td class="convolist-td">
+                                <td class="convolist-td convolist-tdb">
                                     <h4>
                                         {convo.unread ? <b>{convo.displayName + " "}</b> : <>{convo.displayName}</>}{convo.unread ? <Badge pill bg="danger">&#128276;</Badge> : null}
                                     </h4>
