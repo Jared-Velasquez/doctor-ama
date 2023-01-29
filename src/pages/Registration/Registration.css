@@ -19,3 +19,50 @@
     backdrop-filter: blur(10px);
     z-index: 10;
 }
+
+.registrationB {
+    z-index: 10;
+    align-items: center;
+}
+
+.registrationB p {
+    line-height: 30%;
+    margin-bottom: 4px;
+    padding-top: 6px;
+    color: #983d32;
+    font-weight: bold;
+}
+
+.avatarcontainer {
+    float: left;
+    padding: 10px;
+    height: 25vh;
+}
+
+.slidercontainer {
+    float: right;
+    padding-top: 5px;
+    padding: 20px;
+    color:#e16972;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.62), #5c9a6942);
+    border-radius: 20px;
+    height: 65vh;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 10px rgba(84, 84, 84, 0.315);
+    margin: 0px 0px 0px 0px;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.avatar {
+    height: 50px;
+}
+
+.slider {
+    width: 14em;
+    background: #f5ccd0;
+    border-radius: 15px;
+    appearance: none;
+    opacity: 70%;
+    fill-opacity: 20%;
+}
