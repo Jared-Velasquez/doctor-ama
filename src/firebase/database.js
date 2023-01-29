@@ -203,7 +203,7 @@ const initializeConversation = async (recipientID) => {
 
         return {
             status: true,
-            result: "Successfully initialized conversation with user and doctor"
+            result: docRef.id
         }
     } else {
         return {
@@ -412,7 +412,11 @@ const listDoctors = async () => {
     const querySnapshot = await getDocs(q);
     let returnArray = [];
     querySnapshot.forEach((doc) => {
-        returnArray.push(doc.data());
+        let doctorData = doc.data();
+        delete doctorData.conversationList;
+        doctorData.userID = doc.id;
+        
+        returnArray.push(doctorData);
     })
 
     return {

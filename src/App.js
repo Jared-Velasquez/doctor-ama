@@ -19,8 +19,6 @@ import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sen
 
 
 function App() {
-  
-
   return (
     <div className="App">
         <Routes>
