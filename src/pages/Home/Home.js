@@ -9,21 +9,24 @@ import {  useNavigate } from "react-router-dom";
 
 import {
     getUserId,
+    signOutUser,
   } from "../../firebase/account"
 
 function Home (props) {
     let [inConvo, setInConvo] = useState(false);
-    let [testing, setTesting] = useState('loading..');
+    let [uid, setUid] = useState('loading..');
     const navigate = useNavigate();
+
+    let [convoIDAct, setConvoIDAct] = useState(null);
 
     useEffect(
         () => { async function uuu()  {
             const u = await getUserId();
+            console.log("API call made");
             if(!u) {
                 navigate("/login");
             }
-            setTesting(u);
-            console.log("API call made");
+            setUid(u);
         }
         uuu();
         }, []
@@ -32,8 +35,14 @@ function Home (props) {
 
     return (
         <Container className="pt-4">
-            <p>User ID is: {testing}</p>
-            <Button variant="danger" className="float-end">Log Out</Button>
+            <Row><Col><p>User ID is: {uid}</p></Col>
+            <Col><Button variant="danger" className="float-end" onClick={() => {
+                signOutUser();
+                console.log("API Call made")
+                window.location.reload();
+            }}>Log Out</Button>
+</Col></Row>
+            
         <Row>
         <Col>
             {inConvo ? 
@@ -42,10 +51,10 @@ function Home (props) {
                 transition={false}
                 className="mb-3"
               >
-                <Tab eventKey="def" title="Conversation Details">
-                  <ProfileViewer />
+                <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh' }}>
+                  <ProfileViewer convoID={convoIDAct} />
                 </Tab>
-                <Tab eventKey="mine" title="My Profile">
+                <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                   <ProfileEditor />
                 </Tab>
               </Tabs>
@@ -55,7 +64,7 @@ function Home (props) {
              transition={false}
              className="mb-3"
            >
-             <Tab eventKey="def" title="My Profile">
+             <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                <ProfileEditor />
              </Tab>
            </Tabs>}
@@ -67,14 +76,14 @@ function Home (props) {
                 transition={false}
                 className="mb-3"
               >
-                <Tab eventKey="convlist" title="Conversations">
-                  <ConversationList entry={()=>{setInConvo(true)}} />
+                <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
+                  <ConversationList entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
-                <Tab eventKey="find" title="Find Care Professionals">
-                  <CareFinder />
+                <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
+                  <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
               </Tabs>
-             : <ChatViewer exit={()=>{setInConvo(false)}} />}
+             : <ChatViewer uid={uid} exit={()=>{setInConvo(false)}} />}
         </Col>
       </Row>
         </Container>
