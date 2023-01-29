@@ -1,0 +1,30 @@
+{
+    "signupQuestions": [
+        "Name or Nickname",
+        "Preferred Pronouns",
+        "Age",
+        "Date of Birth",
+        "Place of Birth",
+        "Ethnicity",
+        "Gender",
+        "Sex",
+        "Height",
+        "Weight",
+        "Language",
+        "Sexuality",
+        "Past Surgical History",
+        "Allergies",
+        "Drug Allergies",
+        "Current Medication",
+        "History of Pregnancy",
+        "Sexually Active",
+        "Last Menstruation Cycle",
+        "Menopause",
+        "History of Chronic Illness and Disease",
+        "History of Mental Health Conditions",
+        "History of Disease among Blood Relatives",
+        "Symptoms of Concern",
+        "Location of Pain",
+        "Pain Index on Scale of 1 to 10"
+    ]   
+}
