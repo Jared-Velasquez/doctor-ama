@@ -19,30 +19,6 @@ import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sen
 
 
 function App() {
-  useEffect(() => {
-    //initializeConversationWrapper().catch(console.error);
-    //userSendMessageWrapper().catch(console.error);
-    paginationWrapper().catch(console.error);
-  }, [])
-
-  const initializeConversationWrapper = useCallback(async () => {
-    await signInUser('jaredvel25@gmail.com', 'password123');
-    const result = await initializeConversation('QzLltZTPMghitfupPlqXf8SXatY2');
-    console.log(result);
-    //signOutUser();
-  })
-
-  const userSendMessageWrapper = useCallback(async () => {
-    const sentMessage = await sendMessage("zcshUaxclcxWvd9XhlDE", "This is the doctor sending a third message!", "LltZTPMghitfupPlqXf8SXatY2");
-    console.log(sentMessage);
-  })
-
-  const paginationWrapper = useCallback(async () => {
-    //await loadConversation("zcshUaxclcxWvd9XhlDE", 5);
-    const result = await loadConversation("zcshUaxclcxWvd9XhlDE", 5, "HLs98cqE1vdkuInS2xOK");
-    console.log(result);
-  })
-
   return (
     <div className="App">
         <Routes>
