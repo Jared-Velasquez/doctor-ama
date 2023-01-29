@@ -4,6 +4,8 @@
 
 ## Tele-healthcare without bias 
 
+Shalini Rhora, Jared Velasquez, Angela Yang, Jacob Zhi
+
 Dr. AMA allows users to create their own profile that fits with their social identity 
 and medical needs while providing anonymity and safeguarding against bias. This is 
 accomplished through a customizable avatar option and the freedom to choose the 
