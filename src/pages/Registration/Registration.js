@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {makeUser} from "../../firebase/account"
+import {uploadImage} from '../../firebase/database.js';
 import { Alert, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -13,6 +14,7 @@ function Registration(props) {
     const [rpronouns, setRpronouns] = useState('');
     const [remail, setRemail] = useState('');
     const [rpassword, setRpassword] = useState('');
+    const [imageAsFile, setImageAsFile] = useState('');
 
     const [nextFlow, setNextFlow] = useState(false);
 
@@ -28,6 +30,12 @@ function Registration(props) {
         else {
             alert("Something didn't work...");
         }
+    }
+
+    const handleImageAsFile = (file) => {
+        const image = file.target.files[0];
+        setImageAsFile(imageFile => (image));
+        uploadImage(image);
     }
 
     const dummy_qs = ["Name or Nickname", "Preferred Pronouns", "Age",
@@ -63,6 +71,7 @@ function Registration(props) {
                             so everything is always private :)
                             </Form.Text>
                         </Form.Group>
+                        <input type='file' onChange={handleImageAsFile}/>
                         <Button variant="success" type="submit">
                         Register
                         </Button>

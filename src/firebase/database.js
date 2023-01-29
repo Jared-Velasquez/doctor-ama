@@ -1,5 +1,6 @@
 import { doc, getDoc, exists, updateDoc, setDoc, addDoc, arrayUnion, collection, serverTimestamp, getDocs, query, where, startAfter, limit, orderBy } from 'firebase/firestore';
-import {auth, db} from './index.js';
+import {auth, db, storage} from './index.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const initializeUser = async (userID, userType, specialities) => {
     await setDoc(doc(db, "Users", userID), {
@@ -509,4 +510,19 @@ const getUsersFromConversation = async (conversationID) => {
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors, getUserConversations, getUsersFromConversation};
+const uploadImage = async (image) => {
+    const fileName = uuidv4();
+    const uploadTask = storage.ref(`/ProfilePictures/${fileName}`).put(image);
+
+    uploadTask.on('state_changed', (snapshot) => {
+        console.log(snapshot);
+    }, (err) => {
+        console.log(err);
+    }, () => {
+        storage.ref('ProfilePictures').child(fileName).getDownloadURL().then((url) => {
+            console.log(url);
+        })
+    })
+}
+
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors, getUserConversations, getUsersFromConversation, uploadImage};
