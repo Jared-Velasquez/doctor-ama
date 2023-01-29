@@ -29,12 +29,12 @@ function ProfileEditor (props) {
                     {m_data?.result.map((pair, i) => {
                         return (
                         <tr>
-                            <td>Visibility <input type="checkbox" checked={pair.visible} onChange={() => {
+                            <td><input type="checkbox" checked={pair.visible} onChange={() => {
                                 var copy = {...m_data};
                                 copy.result[i].visible = !pair.visible;
                                 setM_data(copy);
 
-                            }} /></td>
+                            }} /> Visibility</td>
                             <td>{pair.key}</td>
                             <td>
                                 <input type="text" value={pair.value} onChange={(e) => {

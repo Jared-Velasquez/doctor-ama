@@ -9,6 +9,7 @@ import {  useNavigate } from "react-router-dom";
 
 import {
     getUserId,
+    signOutUser,
   } from "../../firebase/account"
 
 function Home (props) {
@@ -16,14 +17,16 @@ function Home (props) {
     let [uid, setUid] = useState('loading..');
     const navigate = useNavigate();
 
+    let [convoIDAct, setConvoIDAct] = useState(null);
+
     useEffect(
         () => { async function uuu()  {
             const u = await getUserId();
+            console.log("API call made");
             if(!u) {
                 navigate("/login");
             }
             setUid(u);
-            console.log("API call made");
         }
         uuu();
         }, []
@@ -33,7 +36,11 @@ function Home (props) {
     return (
         <Container className="pt-4">
             <Row><Col><p>User ID is: {uid}</p></Col>
-            <Col><Button variant="danger" className="float-end">Log Out</Button>
+            <Col><Button variant="danger" className="float-end" onClick={() => {
+                signOutUser();
+                console.log("API Call made")
+                window.location.reload();
+            }}>Log Out</Button>
 </Col></Row>
             
         <Row>
@@ -45,7 +52,7 @@ function Home (props) {
                 className="mb-3"
               >
                 <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ProfileViewer />
+                  <ProfileViewer convoID={convoIDAct} />
                 </Tab>
                 <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                   <ProfileEditor />
@@ -70,10 +77,10 @@ function Home (props) {
                 className="mb-3"
               >
                 <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ConversationList entry={()=>{setInConvo(true)}} />
+                  <ConversationList entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
                 <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
-                  <CareFinder />
+                  <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
               </Tabs>
              : <ChatViewer uid={uid} exit={()=>{setInConvo(false)}} />}

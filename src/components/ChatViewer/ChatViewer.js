@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Container, Table, Row, Col, Form} from 'react-bootstrap';
 import './ChatViewer.css'
 
@@ -89,20 +89,25 @@ function ChatViewer (props) {
             "message": "This is the doctor sending a second message!"
         }
     ];
+    const chatEnd = useRef(null);
+    useEffect(() => {
+        chatEnd.current?.scrollIntoView()
+      }, []);
 
     const [draft, setDraft] = useState("");
     return (
         <div>
             <Button onClick={()=>{props.exit()}}>Back</Button>
             <Container className="overflow-auto" style={{ height: '75vh' }}>
-                {dummy_ml.map((m) => {
+                {dummy_ml ? dummy_ml.map((m) => {
                     if(m.sender === props.uid) {
                         return <><p className="chatRight">{time2TimeAgo(m.timestamp)}</p><p className="chatBlue chatRight">{m.message}</p></>
                     }
                     else {
                         return  <span><p>{time2TimeAgo(m.timestamp)}</p><p className="chatGrey">{m.message}</p></span>
                     }
-                })}
+                }) : "No messages yet! Send one now."}
+                <div ref={chatEnd}/>
             </Container>
             <Container>
                 <Row>

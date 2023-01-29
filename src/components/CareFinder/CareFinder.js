@@ -12,7 +12,7 @@ const dummy = {
         healthProfile: [
             {key: "name", value: "Joe Bruin", visible: true},
             {key: "pronouns", value: "he/they", visible: true},
-            {key: "profile", value: "https://www.jeanlouismedical.com/img/doctor-profile-small.png", visible: true}
+            {key: "icon", value: "https://www.jeanlouismedical.com/img/doctor-profile-small.png", visible: true}
         ],
         specialties: ["opthamology", "family med"] 
     }, 
@@ -21,7 +21,7 @@ const dummy = {
         healthProfile: [
             {key: "name", value: "Martha Martinez", visible: true},
             {key: "pronouns", value: "she/her", visible: true},
-            {key: "profile", value: "../../../public/example1.png", visible: true}
+            {key: "icon", value: "../../../public/example1.png", visible: true}
         ],
         specialties: ["obstetrician/gynecology"] 
     },
@@ -50,7 +50,7 @@ function CareFinder (props) {
                     else if (curr === "pronouns") {
                         currpronoun = currvalue
                     }
-                    else if (curr === "profile") {
+                    else if (curr === "icon") {
                         currprofile = currvalue
                     }
                 }

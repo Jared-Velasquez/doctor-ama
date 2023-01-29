@@ -65,7 +65,7 @@ function ConversationList (props) {
                                 </td>
                                 <td class="convolist-td">
                                     <h4>
-                                        {convo.displayName + "  "}{convo.unread ? <Badge pill bg="danger">&#128276;</Badge> : null}
+                                        {convo.unread ? <b>{convo.displayName + " "}</b> : <>{convo.displayName}</>}{convo.unread ? <Badge pill bg="danger">&#128276;</Badge> : null}
                                     </h4>
                                     <p class="convolist-ts">{time2TimeAgo(convo.timestamp)}</p>
                                 </td>
