@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import Image from 'react-bootstrap/Image';
+import { initializeConversation, listDoctors } from '../../firebase/database';
 import './CareFinder.css';
 
 const dummy = {
@@ -29,22 +30,44 @@ const dummy = {
   };
 
 function CareFinder (props) {
-    if(!dummy.status || dummy.result?.length === 0) {
+    const [cf_dl, setCf_dl] = useState(null)
+    useEffect(
+        () => {
+            listDoctorsWrapper().catch(console.error);
+        },
+        []
+    )
+
+    const listDoctorsWrapper = useCallback(async () => {
+        const result = await listDoctors();
+        console.log(result);
+        console.log("Made API call");
+        setCf_dl(result);
+    });
+
+    async function makeAndSwitchChat(userID) {
+        const convoID = await initializeConversation(userID);
+        console.log("Made API Call");
+        props.setConvoIDAct(convoID);
+        props.entry();
+    }
+
+    if(!cf_dl || !(cf_dl?.status) || cf_dl?.result?.length === 0) {
         return (
             <p class="doctorlist-centermsg">No medical providers... yet &#128532;</p>
         )
     }
     return (
         <div class="doctorlist-overall">
-            {dummy.result.map((doctor, i) => {
+            {cf_dl.result.map((doctor, i) => {
                 let currname = null
                 let currpronoun = null
                 let currprofile = null
-                let currspecialties = (doctor.specialties).join(", ")
+                let currspecialties = (doctor.specialities).join(", ")
                 for (let i = 0; i < doctor.healthProfile.length; i++) {
                     let curr = doctor.healthProfile[i].key
                     let currvalue = doctor.healthProfile[i].value
-                    if (curr === "name") {
+                    if (curr === "displayName") {
                         currname = currvalue
                     }
                     else if (curr === "pronouns") {
