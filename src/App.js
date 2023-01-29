@@ -13,11 +13,28 @@ import {
   getUserId,
   userLoggedIn,
 } from "./firebase/account"
-import { getOwnProfile, getOtherProfile, setProfile } from './firebase/database.js';
+import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sendMessage } from './firebase/database.js';
 
 
 
 function App() {
+  useEffect(() => {
+    //initializeConversationWrapper().catch(console.error);
+    userSendMessageWrapper().catch(console.error);
+  }, [])
+
+  const initializeConversationWrapper = useCallback(async () => {
+    await signInUser('jaredvel25@gmail.com', 'password123');
+    const result = await initializeConversation('QzLltZTPMghitfupPlqXf8SXatY2');
+    console.log(result);
+    //signOutUser();
+  })
+
+  const userSendMessageWrapper = useCallback(async () => {
+    const sentMessage = await sendMessage("zcshUaxclcxWvd9XhlDE", "This is the doctor sending a third message!", "LltZTPMghitfupPlqXf8SXatY2");
+    console.log(sentMessage);
+  })
+
   return (
     <div className="App">
         <Routes>
