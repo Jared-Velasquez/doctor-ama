@@ -91,7 +91,7 @@ function CareFinder (props) {
                                 </h4>
                                 <p class="doctorlist-pronouns">{"pronouns: " + currpronoun}</p>
                             </td>
-                            <td>
+                            <td class="chatbutton">
                                 <Button variant="success" onClick={async ()=> {await makeAndSwitchChat(doctor.userID)}}>Chat!</Button>{' '}
                             </td>
                             <td></td> <td></td> <td></td>
