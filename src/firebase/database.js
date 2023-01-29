@@ -491,4 +491,22 @@ const listDoctors = async () => {
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors, getUserConversations};
+const getUsersFromConversation = async (conversationID) => {
+    const conversationRef = doc(db, "Conversations", conversationID);
+    const conversationDoc = await getDoc(conversationRef);
+
+    if (conversationDoc.exists()) {
+        return {
+            status: true,
+            patientID: conversationDoc.data().userID,
+            doctorID: conversationDoc.data().doctorID
+        }
+    } else {
+        return {
+            status: false,
+            result: ""
+        }
+    }
+}
+
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors, getUserConversations, getUsersFromConversation};

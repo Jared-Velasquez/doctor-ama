@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Alert, Table } from 'react-bootstrap';
+import { getOtherProfile } from '../../firebase/database';
 
 function ProfileViewer (props) {
-    const dummy = {
-        status: true,
-      result: [
-          {key: "Name", value: "Jacob Zhi"},
-          {key: "lamaoaoao", value: "fjfoffifjfjf"},
-          {key: "kasefjoaesijoi", value: "fjfoffifjfjf"}
-        ]
-      }
+    const [pv_ul, setPv_ul] = useState(null); 
+
+    useEffect(() => {
+        console.log("begin call getOtherProfile API");
+
+        getOtherProfileWrapper().catch(console.error);
+    }, [props.convoUID])
+
+    const getOtherProfileWrapper = useCallback(async () => {
+        if(props.convoUID) {
+            console.log("convoUID:" + props.convoUID)
+            const result = await getOtherProfile(props.convoUID);
+            console.log("call getOtherProfile API");
+            setPv_ul(result);
+        }
+    })
+
     return (
         <Container>
             <h3>Conversation Profile</h3>
-            {!dummy.status ? 
+            {(!pv_ul || !pv_ul.status) ? 
                 <Alert variant="danger">Error Loading User Profile!</Alert> :
                 <Table striped bordered hover>
       <tbody>
-        {dummy.result.map((pair) => {return(
+        {pv_ul.result.map((pair) => {return(
             <tr>
                 <td>{pair.key}</td>
                 <td>{pair.value}</td>

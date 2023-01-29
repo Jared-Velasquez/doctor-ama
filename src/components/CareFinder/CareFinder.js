@@ -40,15 +40,14 @@ function CareFinder (props) {
 
     const listDoctorsWrapper = useCallback(async () => {
         const result = await listDoctors();
-        console.log(result);
-        console.log("Made API call");
+        console.log("Made listDoctors API call");
         setCf_dl(result);
     });
 
     async function makeAndSwitchChat(userID) {
         const result = await initializeConversation(userID);
         if(result.status) {
-            console.log("Made API Call");
+            console.log("Made initializeConversation API Call");
             props.setConvoIDAct(result.result);
             props.entry();
         }

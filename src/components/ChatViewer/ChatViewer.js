@@ -43,7 +43,7 @@ function ChatViewer (props) {
 
     useEffect(() => {
         loadConversationWrapper().catch(console.error);
-        const interval = setInterval(() => loadConversationWrapper().catch(console.error), 5000)
+        const interval = setInterval(() => loadConversationWrapper().catch(console.error), 15000)
         return () => {
           clearInterval(interval);
         }

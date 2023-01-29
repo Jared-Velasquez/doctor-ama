@@ -1,25 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button, Alert, Table, Container, ToggleButton, Row, Col } from 'react-bootstrap';
+import { getOwnProfile, setProfile } from '../../firebase/database';
 
 function ProfileEditor (props) {
-    const dummy = {
-        status: true,
-      result: [
-          {key: "Name", value: "Jacob Zhi", visible: true},
-          {key: "lamaoaoao", value: "fjfoffifjfjf", visible: false},
-          {key: "kasefjoaesijoi", value: "fjfoffifjfjf", visible: true}
-        ]
-      }
     const [editMode, setEditMode] = useState(false);
-    const [m_data, setM_data] = useState(dummy);
+    const [m_data, setM_data] = useState(null);
+    const [orig_data, setOrig_data] = useState(null);
+
+    useEffect(() => {
+        getHealthProfileWrapper().catch(console.error);
+    }, [props.uid]);
+
+    const getHealthProfileWrapper = useCallback(async () => {
+        console.log("getOwnProfile API Call");
+        const result = await getOwnProfile(props.uid);
+        setM_data(result);
+        setOrig_data(result);
+    })
+
+    const handleSave = async () => {
+        const newHealthData = m_data.result;
+        console.log("setProfile API call");
+        await setProfile(props.uid, newHealthData);
+        setEditMode(false);
+    }
+
     return (
         <Container>
         <h3>My Profile</h3>
 
         <Container>
             <ToggleButton checked={editMode}  variant="outline-primary"
-            onClick={() => {setEditMode(!editMode); setM_data(dummy)}}>{editMode ? "Cancel" : "Edit"}</ToggleButton>{' '}
-            {editMode ? <Button variant="success">Save</Button>: null}
+            onClick={() => {setEditMode(!editMode); setM_data(orig_data)}}>{editMode ? "Cancel" : "Edit"}</ToggleButton>{' '}
+            {editMode ? <Button variant="success" onClick={handleSave}>Save</Button>: null}
         </Container>
         {!m_data?.status ? 
             <Alert variant="danger">Error Loading Your Profile!</Alert> :
