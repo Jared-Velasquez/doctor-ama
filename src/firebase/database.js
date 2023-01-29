@@ -194,17 +194,17 @@ const initializeConversation = async (recipientID) => {
         const initialConversationObjectUser = {
             conversationID: docRef.id,
             unread: false,
-            icon: userIcon,
+            icon: recipientIcon,
             timestamp: Date.now(),
-            displayName: userDisplayName
+            displayName: recipientDisplayName
         }
 
         const initialConversationObjectRecipient = {
             conversationID: docRef.id,
             unread: false,
-            icon: recipientIcon,
+            icon: userIcon,
             timestamp: Date.now(),
-            displayName: recipientDisplayName
+            displayName: userDisplayName
         }
 
         await updateDoc(userRef, {
