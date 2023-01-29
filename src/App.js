@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFound from './pages/NotFound/NotFound';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import Registration from './pages/Registration/Registration'
 import {
   makeUser,
   signInUser,
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
     </div>
