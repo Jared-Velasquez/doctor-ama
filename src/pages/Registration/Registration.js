@@ -1,5 +1,6 @@
-import React, { useState, Slider, useEffect} from 'react';
+import React, { useState, Slider, useEffect, useCallback} from 'react';
 import {makeUser} from "../../firebase/account"
+import {setProfile, uploadImage} from '../../firebase/database.js';
 import { Alert, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -8,6 +9,9 @@ import Col from 'react-bootstrap/Col';
 import {Link} from 'react-router-dom';
 import "./Registration.css"
 import Avatar, { genConfig } from 'react-nice-avatar'
+import html2canvas from 'html2canvas';
+import {getSignupQuestions} from '../../utilities/utilities.js';
+import {  useNavigate } from "react-router-dom";
 
 function Registration(props) {
     
@@ -15,6 +19,7 @@ function Registration(props) {
     const [rpronouns, setRpronouns] = useState('');
     const [remail, setRemail] = useState('');
     const [rpassword, setRpassword] = useState('');
+    const [imageAsFile, setImageAsFile] = useState('');
     
     const [facecolor, setfacecolor] = useState("#F9C9B6");
     const [earsize, setearsize] = useState("big");
@@ -30,6 +35,8 @@ function Registration(props) {
     const [eyebrowstyle, seteyebrowstyle] = useState("up");
     const [shirtcolor, setshirtcolor] = useState("#FC909F");
     const [bgcolor, setbgcolor] = useState("#9287FF");
+
+    const [userID, setUserID] = useState("");
 
     const[config, setConfig] = useState({
         "faceColor": "#F9C9B6",
@@ -47,6 +54,8 @@ function Registration(props) {
         "shirtColor": "#FC909F",
         "bgColor": "#9287FF"
     })
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setConfig({
@@ -71,26 +80,29 @@ function Registration(props) {
 
     const [nextFlow, setNextFlow] = useState(false);
 
+    async function handleHealthProfileSubmit(event) {
+        event.preventDefault();
+        await setProfile(userID, intake);
+        navigate("/");
+    }
+
     async function handleRegistrationSubmit(event) {
         event.preventDefault();
         let testvar = await makeUser(remail, rpassword)
+        setUserID(testvar.id);
         console.log(testvar);
         if(testvar){
             alert("Successfully Registered!");
             setNextFlow(true);
-            //window.location = "/";
         }
         else {
             alert("Something didn't work...");
         }
     }
 
-    const dummy_qs = ["Name or Nickname", "Preferred Pronouns", "Age",
-    "Date of Birth", "Place of Birth", "Ethnicity",
-    "Gender", "Sex", "Height",
-    "Weight", "Language", "Sexuality"]
+    const questions = getSignupQuestions();
 
-    const [intake, setIntake] = useState(dummy_qs.map((q) => {return {key: q, value: "", visible: true}}))
+    const [intake, setIntake] = useState(questions.map((q) => {return {key: q, value: "", visible: true}}))
     return (
         <Container className="registrationcontainer">
             <div>
@@ -139,11 +151,11 @@ function Registration(props) {
                         )
                     })}
                     </Form>
-                    <Button>Submit</Button>
+                    <Button variant='success' onClick={handleHealthProfileSubmit}>Submit</Button>
                     </>}
                 </Col>
                 <Col className="registrationB">
-                    <div className="avatarcontainer">
+                    <div className="avatarcontainer" id="screenshot-canvas">
                         <Avatar className="avatar" style={{ width: '18vw', height: '18vw' }} {...config} />
                     </div>
                     <div className="slidercontainer">
