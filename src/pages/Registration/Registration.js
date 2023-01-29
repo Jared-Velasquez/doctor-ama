@@ -140,8 +140,8 @@ function Registration(props) {
                     <Form>
                     {intake.map((f, i) => {
                         return (<>
-                            <Form.Label>{f.key}</Form.Label>
-                            <Form.Control type="text" placeholder="Optional" value={f.value} onChange={(e) => {
+                            <Form.Label className='formlabel'>{f.key}</Form.Label>
+                            <Form.Control className='formcontrol' type="text" placeholder="Optional" value={f.value} onChange={(e) => {
                                     var copy = intake.slice();
                                     copy[i].value = e.target.value;
                                     setIntake(copy);
