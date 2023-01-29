@@ -44,6 +44,29 @@ const getOwnProfile = async (userID) => {
     }
 }
 
+const getUserConversations = async (userID) => {
+    const userRef = doc(db, 'Users', userID);
+
+    const userDoc = await getDoc(userRef).catch((error) => {
+        return {
+            status: false,
+            result: "Error in retrieving document from Firestore Database"
+        }
+    });
+
+    if (userDoc.exists()) {
+        return {
+            status: true,
+            result: userDoc.data().conversationList.sort(function compareFn(a, b) { return b.timestamp - a.timestamp; })
+        }
+    } else {
+        return {
+            status: false,
+            result: "User ID does not exist within Firestore Database"
+        }
+    }
+}
+
 const getOtherProfile = async (userID) => {
     //const userRef = database.collection('Users').doc(userID);
     const userRef = doc(db, "Users", userID);
@@ -171,17 +194,17 @@ const initializeConversation = async (recipientID) => {
         const initialConversationObjectUser = {
             conversationID: docRef.id,
             unread: false,
-            icon: userIcon,
+            icon: recipientIcon,
             timestamp: Date.now(),
-            displayName: userDisplayName
+            displayName: recipientDisplayName
         }
 
         const initialConversationObjectRecipient = {
             conversationID: docRef.id,
             unread: false,
-            icon: recipientIcon,
+            icon: userIcon,
             timestamp: Date.now(),
-            displayName: recipientDisplayName
+            displayName: userDisplayName
         }
 
         await updateDoc(userRef, {
@@ -214,7 +237,7 @@ const initializeConversation = async (recipientID) => {
 }
 
 const sendMessage = async (conversationID, message, userID) => {
-    const conversationRef = await doc(db, "Conversations", conversationID);
+    const conversationRef = doc(db, "Conversations", conversationID);
 
     const conversationDoc = await getDoc(conversationRef).catch((error) => {
         return {
@@ -240,6 +263,17 @@ const sendMessage = async (conversationID, message, userID) => {
             }
         }
 
+        /*const doctorID = conversationDoc.data().doctorID;
+        const patientID = conversationDoc.data().userID;
+
+        const doctorRef = doc(db, "Users", doctorID);
+        const patientRef = doc(db, "Users", patientID);
+
+        const doctorDoc = await getDoc(doctorRef);
+        const patientDoc = await getDoc(patientRef);*/
+
+        
+
         // Send the message
         addDoc(streamRef, {
             sender: userID,
@@ -247,14 +281,9 @@ const sendMessage = async (conversationID, message, userID) => {
             timestamp: Date.now()
         })
 
-        const userRef = await doc(db, "Users", otherUser)
+        const userRef = await doc(db, "Users", userID);
 
-        const userDoc = await getDoc(userRef).catch((error) => {
-            return {
-                status: false,
-                result: "Error in retrieving user document within Firestore Database"
-            }
-        });
+        const userDoc = await getDoc(userRef);
 
         if (userDoc.exists()) {
             const conversationList = userDoc.data().conversationList;
@@ -266,7 +295,7 @@ const sendMessage = async (conversationID, message, userID) => {
                 }
             } else {
                 let chosenConversation = chosenConversationElement[0];
-                chosenConversation.unread = true;
+                chosenConversation.timestamp = Date.now();
 
                 let deletedChosenConversation = conversationList.filter(element => element.conversationID !== conversationID);
                 deletedChosenConversation.push(chosenConversation);
@@ -274,16 +303,53 @@ const sendMessage = async (conversationID, message, userID) => {
                 await updateDoc(userRef, {
                     conversationList: deletedChosenConversation
                 });
-                return {
-                    status: true,
-                    result: "Conversation has been successfully updated"
-                }
             }
         } else {
             return {
                 status: false,
                 result: "User does not exist within Firestore Database"
             }
+        }
+
+        const otherRef = await doc(db, "Users", otherUser)
+
+        const otherDoc = await getDoc(otherRef).catch((error) => {
+            return {
+                status: false,
+                result: "Error in retrieving user document within Firestore Database"
+            }
+        });
+
+        if (otherDoc.exists()) {
+            const conversationList = otherDoc.data().conversationList;
+            const chosenConversationElement = conversationList.filter(element => element.conversationID === conversationID);
+            if (chosenConversationElement.length === 0) {
+                return {
+                    status: false,
+                    result: "Conversation does not exist within user"
+                }
+            } else {
+                let chosenConversation = chosenConversationElement[0];
+                chosenConversation.unread = true;
+                chosenConversation.timestamp = Date.now();
+
+                let deletedChosenConversation = conversationList.filter(element => element.conversationID !== conversationID);
+                deletedChosenConversation.push(chosenConversation);
+
+                await updateDoc(otherRef, {
+                    conversationList: deletedChosenConversation
+                });
+            }
+        } else {
+            return {
+                status: false,
+                result: "User does not exist within Firestore Database"
+            }
+        }
+
+        return {
+            status: true,
+            result: "Conversation has been successfully updated"
         }
     } else {
         return {
@@ -425,4 +491,22 @@ const listDoctors = async () => {
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors};
+const getUsersFromConversation = async (conversationID) => {
+    const conversationRef = doc(db, "Conversations", conversationID);
+    const conversationDoc = await getDoc(conversationRef);
+
+    if (conversationDoc.exists()) {
+        return {
+            status: true,
+            patientID: conversationDoc.data().userID,
+            doctorID: conversationDoc.data().doctorID
+        }
+    } else {
+        return {
+            status: false,
+            result: ""
+        }
+    }
+}
+
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors, getUserConversations, getUsersFromConversation};

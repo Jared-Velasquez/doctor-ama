@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
 import CareFinder from '../../components/CareFinder/CareFinder';
 import ChatViewer from '../../components/ChatViewer/ChatViewer';
@@ -11,6 +11,7 @@ import {
     getUserId,
     signOutUser,
   } from "../../firebase/account"
+import { getUsersFromConversation } from '../../firebase/database';
 
 function Home (props) {
     let [inConvo, setInConvo] = useState(false);
@@ -18,6 +19,8 @@ function Home (props) {
     const navigate = useNavigate();
 
     let [convoIDAct, setConvoIDAct] = useState(null);
+
+    let [convoUID, setConvoUID] = useState(null)
 
     useEffect(
         () => { async function uuu()  {
@@ -31,6 +34,27 @@ function Home (props) {
         uuu();
         }, []
     )
+
+    useEffect(
+        () => {
+            getUsersFromConversationWrapper().catch(console.error);
+        }, [convoIDAct]
+    )
+
+    const getUsersFromConversationWrapper = useCallback(async () => {
+        const result = await getUsersFromConversation(convoIDAct);
+        if(result.status) {
+            if(result.doctorID === uid) {
+                console.log("Other uid is patient")
+                setConvoUID(result.patientID);
+            }
+            else {
+                console.log("Other uid is doctor")
+                setConvoUID(result.doctorID);
+            }
+        }
+        console.log("Call getUsersFromConversation API");
+    })
 
 
     return (
@@ -51,11 +75,11 @@ function Home (props) {
                 transition={false}
                 className="mb-3"
               >
-                <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ProfileViewer convoID={convoIDAct} />
+                <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
+                  <ProfileViewer convoUID={convoUID} />
                 </Tab>
-                <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ProfileEditor />
+                <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
+                  <ProfileEditor uid={uid} />
                 </Tab>
               </Tabs>
              : 
@@ -64,8 +88,8 @@ function Home (props) {
              transition={false}
              className="mb-3"
            >
-             <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
-               <ProfileEditor />
+             <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh', width: '40vw' }}>
+               <ProfileEditor uid={uid} />
              </Tab>
            </Tabs>}
         </Col>
@@ -77,13 +101,13 @@ function Home (props) {
                 className="mb-3"
               >
                 <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ConversationList entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
+                  <ConversationList uid={uid} entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
                 <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
-                  <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
+                  <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct}  />
                 </Tab>
               </Tabs>
-             : <ChatViewer uid={uid} exit={()=>{setInConvo(false)}} />}
+             : <ChatViewer convoID={convoIDAct} uid={uid} exit={()=>{setInConvo(false)}} />}
         </Col>
       </Row>
         </Container>

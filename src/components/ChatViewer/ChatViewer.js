@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, Container, Table, Row, Col, Form} from 'react-bootstrap';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Button, Container, Alert, Row, Col, Form} from 'react-bootstrap';
+import { loadConversation, sendMessage } from '../../firebase/database';
 import './ChatViewer.css'
 
 // attribution time2TimeAgo: https://stackoverflow.com/questions/19540077/converting-unix-time-to-minutes-ago-in-javascript
@@ -37,87 +38,69 @@ function time2TimeAgo(ts) {
 }
 
 function ChatViewer (props) {
-    const dummy_ml = [
-        {
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY2",
-            "timestamp": 1674955189943,
-            "message": "This is the doctor sending a message!"
-        },
-        {
-            "timestamp": 1674955228695,
-            "sender": "nDk3GxvFTDhplSbK7ge63sE2zc73",
-            "message": "This is the patient sending a message!"
-        },
-        {
-            "timestamp": 1674955325337,
-            "message": "This is the patient sending a second message!",
-            "sender": "nDk3GxvFTDhplSbK7ge63sE2zc73"
-        },
-        {
-            "message": "This is the doctor sending a second message!",
-            "timestamp": 1674955340053,
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY"
-        },
-        {
-            "timestamp": 1674955352675,
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY2",
-            "message": "This is the doctor sending a second message!"
-        },
-        {
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY2",
-            "timestamp": 1674955189943,
-            "message": "This is the doctor sending a message!"
-        },
-        {
-            "timestamp": 1674955228695,
-            "sender": "nDk3GxvFTDhplSbK7ge63sE2zc73",
-            "message": "This is the patient sending a message!"
-        },
-        {
-            "timestamp": 1674955325337,
-            "message": "This is the patient sending a second message!",
-            "sender": "nDk3GxvFTDhplSbK7ge63sE2zc73"
-        },
-        {
-            "message": "This is the doctor sending a second message!",
-            "timestamp": 1674955340053,
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY"
-        },
-        {
-            "timestamp": 1674961871012,
-            "sender": "QzLltZTPMghitfupPlqXf8SXatY2",
-            "message": "This is the doctor sending a second message!"
+    const [messages, setMessages] = useState(null);
+    const PAGINATION_WINDOW = 100;
+
+    useEffect(() => {
+        loadConversationWrapper().catch(console.error);
+        const interval = setInterval(() => loadConversationWrapper().catch(console.error), 15000)
+        return () => {
+          clearInterval(interval);
         }
-    ];
+    }, [props.convoID]);
+
+    const loadConversationWrapper = useCallback(async () => {
+        if(props.convoID) {
+            console.log("Made API Call TEST BEFORE");
+            console.log(props.convoID);
+            const result = await loadConversation(props.convoID, PAGINATION_WINDOW);
+            setMessages(result);
+            //console.log(result);
+        }
+    })
+
     const chatEnd = useRef(null);
+
     useEffect(() => {
         chatEnd.current?.scrollIntoView()
-      }, []);
+      }, [messages]);
 
     const [draft, setDraft] = useState("");
+
+    const handleMessageSend = async () => {
+        if (draft.length >= 0) {
+            await sendMessage(props.convoID, draft, props.uid);
+            console.log("Made API Call");
+            const result = await loadConversation(props.convoID, PAGINATION_WINDOW);
+            setMessages(result);
+            setDraft("");
+            
+        }
+    }
+
     return (
         <div>
             <Button onClick={()=>{props.exit()}}>Back</Button>
             <Container className="overflow-auto" style={{ height: '75vh' }}>
-                {dummy_ml ? dummy_ml.map((m) => {
+                {(messages?.result && messages.result.length > 0) ? messages.result.map((m) => {
                     if(m.sender === props.uid) {
                         return <><p className="chatRight">{time2TimeAgo(m.timestamp)}</p><p className="chatBlue chatRight">{m.message}</p></>
                     }
                     else {
                         return  <span><p>{time2TimeAgo(m.timestamp)}</p><p className="chatGrey">{m.message}</p></span>
                     }
-                }) : "No messages yet! Send one now."}
+                }) : <Alert>"No messages yet! Send one now."</Alert>}
                 <div ref={chatEnd}/>
             </Container>
             <Container>
                 <Row>
                     <Col  xs={9}>
-                        <Form.Control as="textarea" rows={1} placeholder="Send a message..."  onChange={((e) => {
+                        <Form.Control as="textarea" rows={1} placeholder="Send a message..." value={draft} onChange={((e) => {
                             setDraft(e.target.value)
                         })}/>
                     </Col>
                     <Col>
-                        <Button>&#11152;</Button>
+                        <Button onClick={async () => {await handleMessageSend();}}>&#11152;</Button>
                     </Col>
                 </Row>
             </Container>
