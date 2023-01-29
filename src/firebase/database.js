@@ -125,14 +125,67 @@ const initializeConversation = async (recipientID) => {
 
         const userRef = doc(db, "Users", auth.currentUser.uid);
 
-        const initialConversationObject = {
+        const userDoc = await getDoc(userRef).catch((error) => {
+            return {
+                status: false,
+                result: "Error in retrieving document from Firestore Database"
+            }
+        })
+
+        const userDisplayNameArray = userDoc.data().healthProfile.filter(element => element.key === "displayName");
+        const recipientDisplayNameArray = recipientDoc.data().healthProfile.filter(element => element.key === "displayName");
+
+        const userIconArray = userDoc.data().healthProfile.filter(element => element.key === "icon");
+        const recipientIconArray = recipientDoc.data().healthProfile.filter(element => element.key === "icon");
+
+        let userDisplayName = "";
+        let recipientDisplayName = "";
+
+        if (userDisplayNameArray.length === 0 || !userDisplayNameArray[0].visible) {
+            userDisplayName = "Anonymous"
+        } else {
+            userDisplayName = userDisplayNameArray[0].value;
+        }
+
+        if (recipientDisplayNameArray.length === 0  || !recipientDisplayNameArray[0].visible) {
+            recipientDisplayName = "Anonymous"
+        } else {
+            recipientDisplayName = recipientDisplayNameArray[0].value;
+        }
+
+        let userIcon = "";
+        let recipientIcon = "";
+
+        if (userIconArray.length === 0 || !userIconArray[0].visible) {
+            userIcon = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png";
+        } else {
+            userIcon = userIconArray[0].value;
+        }
+
+        if (recipientIconArray.length === 0 || !recipientIconArray[0].visible) {
+            recipientIconArray = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png";
+        } else {
+            recipientIcon = recipientIconArray[0].value;
+        }
+
+        const initialConversationObjectUser = {
             conversationID: docRef.id,
             unread: false,
-            icon: "",
-            timestamp: Date.now()
+            icon: userIcon,
+            timestamp: Date.now(),
+            displayName: userDisplayName
         }
+
+        const initialConversationObjectRecipient = {
+            conversationID: docRef.id,
+            unread: false,
+            icon: recipientIcon,
+            timestamp: Date.now(),
+            displayName: recipientDisplayName
+        }
+
         await updateDoc(userRef, {
-            conversationList: arrayUnion(initialConversationObject)
+            conversationList: arrayUnion(initialConversationObjectUser)
         }).catch((error) => {
             return {
                 status: false,
@@ -140,7 +193,7 @@ const initializeConversation = async (recipientID) => {
             }
         })
         await updateDoc(recipientRef, {
-            conversationList: arrayUnion(initialConversationObject)
+            conversationList: arrayUnion(initialConversationObjectRecipient)
         }).catch((error) => {
             return {
                 status: false,
@@ -319,4 +372,53 @@ const loadConversation = async (conversationID, paginationWindow, lastDocument =
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation};
+const markRead = async (conversationID, userID) => {
+    const userRef = await doc(db, "Users", userID);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+        const conversationList = userDoc.data().conversationList;
+        const chosenConversationElement = conversationList.filter(element => element.conversationID === conversationID);
+        if (chosenConversationElement.length === 0) {
+            return {
+                status: false,
+                result: "Conversation does not exist within user"
+            }
+        } else {
+            let chosenConversation = chosenConversationElement[0];
+            chosenConversation.unread = false;
+
+            let deletedChosenConversation = conversationList.filter(element => element.conversationID !== conversationID);
+            deletedChosenConversation.push(chosenConversation);
+
+            await updateDoc(userRef, {
+                conversationList: deletedChosenConversation
+            });
+            return {
+                status: true,
+                result: "Conversation has been successfully updated"
+            }
+        }
+    } else {
+        return {
+            status: false,
+            result: "User ID does not exist within Firestore Database"
+        }
+    }
+}
+
+const listDoctors = async () => {
+    const q = query(collection(db, "Users"), where("type", "==", 1));
+    const querySnapshot = await getDocs(q);
+    let returnArray = [];
+    querySnapshot.forEach((doc) => {
+        returnArray.push(doc.data());
+    })
+
+    return {
+        status: true,
+        result: returnArray
+    }
+}
+
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation, markRead, listDoctors};
