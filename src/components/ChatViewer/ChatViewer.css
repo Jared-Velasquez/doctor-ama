@@ -1,0 +1,19 @@
+.chatBlue {
+border-radius: 10px;
+  background: #78bfa1;
+  padding: 10px;
+    width: 70%;
+    text-align: left!important;
+}
+.chatRight {
+    margin-left: auto; 
+    margin-right: 0;
+    text-align: right;
+}
+
+.chatGrey {
+    border-radius: 10px;
+      background: rgb(247, 247, 247);
+      padding: 10px;
+        width: 70%;
+    }

@@ -13,7 +13,7 @@ import {
 
 function Home (props) {
     let [inConvo, setInConvo] = useState(false);
-    let [testing, setTesting] = useState('loading..');
+    let [uid, setUid] = useState('loading..');
     const navigate = useNavigate();
 
     useEffect(
@@ -22,7 +22,7 @@ function Home (props) {
             if(!u) {
                 navigate("/login");
             }
-            setTesting(u);
+            setUid(u);
             console.log("API call made");
         }
         uuu();
@@ -32,7 +32,7 @@ function Home (props) {
 
     return (
         <Container className="pt-4">
-            <p>User ID is: {testing}</p>
+            <p>User ID is: {uid}</p>
             <Button variant="danger" className="float-end">Log Out</Button>
         <Row>
         <Col>
@@ -74,7 +74,7 @@ function Home (props) {
                   <CareFinder />
                 </Tab>
               </Tabs>
-             : <ChatViewer exit={()=>{setInConvo(false)}} />}
+             : <ChatViewer uid={uid} exit={()=>{setInConvo(false)}} />}
         </Col>
       </Row>
         </Container>
