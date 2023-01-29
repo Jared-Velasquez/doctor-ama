@@ -203,7 +203,7 @@ const initializeConversation = async (recipientID) => {
 
         return {
             status: true,
-            result: "Successfully initialized conversation with user and doctor"
+            result: docRef.id
         }
     } else {
         return {
