@@ -1,4 +1,4 @@
-import { doc, getDoc, exists, updateDoc, setDoc, addDoc, arrayUnion, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, exists, updateDoc, setDoc, addDoc, arrayUnion, collection, serverTimestamp, getDocs, query, where, startAfter, limit, orderBy } from 'firebase/firestore';
 import {auth, db} from './index.js';
 
 const initializeUser = async (userID, userType, specialities) => {
@@ -240,4 +240,83 @@ const sendMessage = async (conversationID, message, userID) => {
     }
 }
 
-export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage};
+const loadConversation = async (conversationID, paginationWindow, lastDocument = "lastDocument") => {
+    const conversationRef = await doc(db, "Conversations", conversationID);
+
+    const conversationDoc = await getDoc(conversationRef).catch((error) => {
+        return {
+            status: false,
+            result: "Error in retrieving conversation document wtihin Firestore Database"
+        }
+    })
+
+    if (conversationDoc.exists()) {
+        const messageRef = await doc(conversationRef, "ConversationStream", lastDocument);
+        const messageDoc = await getDoc(messageRef).catch((error) => {
+            return {
+                status: false,
+                result: "Error in retrieving conversation document within Firestore Database"
+            }
+        })
+
+        if (messageDoc.exists()) {
+            const streamRef = await collection(conversationRef, "ConversationStream");
+            let lastDoc;
+            const q = query(collection(conversationRef, "ConversationStream"), where("timestamp", "==", messageDoc.data().timestamp));
+
+            const singleSnapshot = await getDocs(q);
+            lastDoc = singleSnapshot.docs[0];
+
+            const nextQuery = query(streamRef, orderBy("timestamp"), startAfter(lastDoc), limit(paginationWindow));
+            const messageSnapshots = await getDocs(nextQuery);
+
+            let returnArray = [];
+            let lastVisibleID = "";
+    
+            let index = 0;
+            messageSnapshots.forEach((message) => {
+                if (index === messageSnapshots.docs.length - 1) {
+                    lastVisibleID = message.id;
+                }
+                returnArray.push(message.data());
+                index++;
+            })
+    
+            return {
+                status: true,
+                result: returnArray,
+                lastVisibleID: lastVisibleID
+            }
+        } else {
+            const streamRef = collection(conversationRef, "ConversationStream");
+
+            const mostRecentQuery = query(streamRef, orderBy("timestamp"), limit(paginationWindow));
+            const messageSnapshots = await getDocs(mostRecentQuery);
+    
+            let returnArray = [];
+            let lastVisibleID = "";
+    
+            let index = 0;
+            messageSnapshots.forEach((message) => {
+                if (index === messageSnapshots.docs.length - 1) {
+                    lastVisibleID = message.id;
+                }
+                returnArray.push(message.data());
+                index++;
+            })
+    
+            return {
+                status: true,
+                result: returnArray,
+                lastVisibleID: lastVisibleID
+            }
+        }
+    } else {
+        return {
+            status: false,
+            result: "Conversation ID does not exist within Firestore Database"
+        }
+    }
+}
+
+export {getOwnProfile, getOtherProfile, setProfile, initializeUser, initializeConversation, sendMessage, loadConversation};

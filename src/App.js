@@ -14,7 +14,7 @@ import {
   getUserId,
   userLoggedIn,
 } from "./firebase/account"
-import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sendMessage } from './firebase/database.js';
+import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sendMessage, loadConversation } from './firebase/database.js';
 
 
 
