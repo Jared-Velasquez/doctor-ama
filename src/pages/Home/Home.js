@@ -1,17 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Container, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
 import CareFinder from '../../components/CareFinder/CareFinder';
 import ChatViewer from '../../components/ChatViewer/ChatViewer';
 import ConversationList from '../../components/ConversationList/ConversationList';
 import ProfileEditor from '../../components/ProfileEditor/ProfileEditor';
 import ProfileViewer from '../../components/ProfileViewer/ProfileViewer';
+import {  useNavigate } from "react-router-dom";
+
+import {
+    getUserId,
+  } from "../../firebase/account"
 
 function Home (props) {
     let [inConvo, setInConvo] = useState(false);
+    let [testing, setTesting] = useState('loading..');
+    const navigate = useNavigate();
+
+    useEffect(
+        () => { async function uuu()  {
+            const u = await getUserId();
+            if(!u) {
+                navigate("/login");
+            }
+            setTesting(u);
+            console.log("API call made");
+        }
+        uuu();
+        }, []
+    )
 
 
     return (
         <Container className="pt-4">
+            <p>User ID is: {testing}</p>
+            <Button variant="danger" className="float-end">Log Out</Button>
         <Row>
         <Col>
             {inConvo ? 
