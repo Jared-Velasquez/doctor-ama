@@ -68,3 +68,11 @@
     opacity: 70%;
     fill-opacity: 20%;
 }
+
+.formlabel {
+    margin-bottom: 0px;
+}
+
+.formcontrol {
+    margin-bottom: 10px;
+}
