@@ -68,10 +68,10 @@ function CareFinder (props) {
                 for (let i = 0; i < doctor.healthProfile.length; i++) {
                     let curr = doctor.healthProfile[i].key
                     let currvalue = doctor.healthProfile[i].value
-                    if (curr === "displayName") {
+                    if (curr === "Name or Nickname") {
                         currname = currvalue
                     }
-                    else if (curr === "pronouns") {
+                    else if (curr === "Preferred Pronouns") {
                         currpronoun = currvalue
                     }
                     else if (curr === "icon") {

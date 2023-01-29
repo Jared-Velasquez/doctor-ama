@@ -157,8 +157,8 @@ const initializeConversation = async (recipientID) => {
             }
         })
 
-        const userDisplayNameArray = userDoc.data().healthProfile.filter(element => element.key === "displayName");
-        const recipientDisplayNameArray = recipientDoc.data().healthProfile.filter(element => element.key === "displayName");
+        const userDisplayNameArray = userDoc.data().healthProfile.filter(element => element.key === "Name or Nickname");
+        const recipientDisplayNameArray = recipientDoc.data().healthProfile.filter(element => element.key === "Name or Nickname");
 
         const userIconArray = userDoc.data().healthProfile.filter(element => element.key === "icon");
         const recipientIconArray = recipientDoc.data().healthProfile.filter(element => element.key === "icon");
@@ -177,6 +177,9 @@ const initializeConversation = async (recipientID) => {
         } else {
             recipientDisplayName = recipientDisplayNameArray[0].value;
         }
+
+        console.log(userDisplayName);
+        console.log(recipientDisplayName);
 
         let userIcon = "";
         let recipientIcon = "";

@@ -9,7 +9,6 @@ import Col from 'react-bootstrap/Col';
 import {Link} from 'react-router-dom';
 import "./Registration.css"
 import Avatar, { genConfig } from 'react-nice-avatar'
-import html2canvas from 'html2canvas';
 import {getSignupQuestions} from '../../utilities/utilities.js';
 import {  useNavigate } from "react-router-dom";
 
@@ -155,7 +154,7 @@ function Registration(props) {
                     </>}
                 </Col>
                 <Col className="registrationB">
-                    <div className="avatarcontainer" id="screenshot-canvas">
+                    <div className="avatarcontainer">
                         <Avatar className="avatar" style={{ width: '18vw', height: '18vw' }} {...config} />
                     </div>
                     <div className="slidercontainer">
