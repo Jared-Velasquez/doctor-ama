@@ -412,7 +412,11 @@ const listDoctors = async () => {
     const querySnapshot = await getDocs(q);
     let returnArray = [];
     querySnapshot.forEach((doc) => {
-        returnArray.push(doc.data());
+        let doctorData = doc.data();
+        delete doctorData.conversationList;
+        doctorData.userID = doc.id;
+        
+        returnArray.push(doctorData);
     })
 
     return {
