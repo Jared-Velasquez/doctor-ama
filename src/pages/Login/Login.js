@@ -19,7 +19,7 @@ function Login(props) {
     async function handleLoginSubmit(event) {
         event.preventDefault();
         if(await signInUser(lemail, lpassword)){
-            alert("Successfully logged in!");
+            //alert("Successfully logged in!");
             navigate("/");
         }
         else {
