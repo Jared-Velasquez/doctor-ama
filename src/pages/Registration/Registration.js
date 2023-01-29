@@ -36,60 +36,62 @@ function Registration(props) {
     "Weight", "Language", "Sexuality"]
 
     const [intake, setIntake] = useState(dummy_qs.map((q) => {return {key: q, value: "", visible: true}}))
-
     return (
-        <Container>
-        <div class="registrationcontainer">
-        <Row className="rowcontainer">
-            <Col className="registrationA">
-                {!nextFlow? <>
-                <p class="intro">Registration: Hi, it's nice to meet you!</p>
-                <Form onSubmit={handleRegistrationSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email to Register!</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={remail} onChange={(e) => setRemail(e.target.value)}/>
-                        <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                        </Form.Text>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={rpassword} onChange={(e) => setRpassword(e.target.value)}/>
-                        <Form.Text className="text-muted">
-                        so everything is always private :)
-                        </Form.Text>
-                    </Form.Group>
-                    <Button variant="success" type="submit">
-                    Register
-                    </Button>
-                    <Button as={Link} className="loginbutton" to="/login">Log In Instead</Button>
-                </Form>
-                </> : <>
-                <h3>Intake Form</h3>
-                <p>Please leave any questions you would not like to answer blank.</p>
-                <Form>
-                {intake.map((f, i) => {
-                    return (<>
-                        <Form.Label>{f.key}</Form.Label>
-                        <Form.Control type="text" placeholder="Optional" value={f.value} onChange={(e) => {
-                                var copy = intake.slice();
-                                copy[i].value = e.target.value;
-                                setIntake(copy);
-                            }} />
-                        </>
-                    )
-                })}
-                </Form>
-                <Button>Submit</Button>
-                </>}
-            </Col>
-            <Col className="square border-end registrationB">
-                <p class="slogan">[avatar]</p>
-            </Col>
-        </Row>
-        </div>
+        <Container className="registrationcontainer">
+            <div>
+                <img class="monstera1" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+            </div>
+            <div>
+                <img class="monstera2" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+            </div>
+            <Row className="rowcontainer">
+                <Col className="registrationA">
+                    {!nextFlow? <>
+                    <p class="intro">Registration: Hi, it's nice to meet you! &#128522;</p>
+                    <Form onSubmit={handleRegistrationSubmit}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email to Register!</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" value={remail} onChange={(e) => setRemail(e.target.value)}/>
+                            <Form.Text className="text-muted">
+                            We'll never share your email with anyone else.
+                            </Form.Text>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" value={rpassword} onChange={(e) => setRpassword(e.target.value)}/>
+                            <Form.Text className="text-muted">
+                            so everything is always private :)
+                            </Form.Text>
+                        </Form.Group>
+                        <Button variant="success" type="submit">
+                        Register
+                        </Button>
+                        <Button as={Link} className="loginbutton" to="/login">Log In Instead</Button>
+                    </Form>
+                    </> : <>
+                    <h3>Intake Form</h3>
+                    <p>Please leave any questions you would not like to answer blank.</p>
+                    <Form>
+                    {intake.map((f, i) => {
+                        return (<>
+                            <Form.Label>{f.key}</Form.Label>
+                            <Form.Control type="text" placeholder="Optional" value={f.value} onChange={(e) => {
+                                    var copy = intake.slice();
+                                    copy[i].value = e.target.value;
+                                    setIntake(copy);
+                                }} />
+                            </>
+                        )
+                    })}
+                    </Form>
+                    <Button>Submit</Button>
+                    </>}
+                </Col>
+                <Col className="registrationB">
+                    <p>[avatar]</p>
+                </Col>
+            </Row>
         </Container>
     );
 }
-
 export default Registration;
