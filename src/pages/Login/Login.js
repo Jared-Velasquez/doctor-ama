@@ -24,10 +24,15 @@ function Login(props) {
     }
 
     return (
-        <Container>
-        <div class="logincontainer">
+        <Container className="logincontainer">
+        <div>
+            <img class="monstera1" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+        </div>
+        <div>
+            <img class="monstera2" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
+        </div>
         <Row className="rowcontainer">
-            <Col className="square border-end loginA">
+            <Col className="loginA">
                     <p class="slogan">Affirming, Accessible Healthcare Without Bias or Discrimination.</p>
             </Col>
             <Col className="loginB">
@@ -47,14 +52,13 @@ function Login(props) {
                     <Button variant="success" type="submit">
                     Log In
                     </Button>
-                    <Button as={Link} className="registerbutton" to="/registration">Register</Button>
+                    <div className="registerbutton">
+                        No account? <Button variant="secondary" as={Link} to="/registration">Register</Button>
+                    </div>
                 </Form>
             </Col>
         </Row>
-        </div>
         </Container>
     );
-    }
-
-
+}
 export default Login;
