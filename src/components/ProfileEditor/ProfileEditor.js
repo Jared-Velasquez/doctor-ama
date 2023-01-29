@@ -27,7 +27,8 @@ function ProfileEditor (props) {
     }
 
     return (
-        <Container className="profilecontainer">
+        <Container className='bigprofilecontainer'>
+        <div className='profilecontainer'>
         <h3>My Medical Profile</h3>
 
         <Container>
@@ -77,9 +78,10 @@ function ProfileEditor (props) {
                     }
                 </tbody>
                 </Table>
-        }
-    </Container>
-    );
+            }
+                </div>
+            </Container>
+            );
 }
 
 export default ProfileEditor;

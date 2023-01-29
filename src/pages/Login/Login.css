@@ -48,7 +48,7 @@
 .monstera1 {
     position: absolute;
     height: 80vh;
-    right: -20px;
+    left: 50vw;
     transform: rotate(45deg);
     z-index: 0;
     opacity: 80%;

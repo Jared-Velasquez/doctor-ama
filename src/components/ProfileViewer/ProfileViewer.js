@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Alert, Table } from 'react-bootstrap';
 import { getOtherProfile } from '../../firebase/database';
+import './ProfileViewer.css'
 
 function ProfileViewer (props) {
     const [pv_ul, setPv_ul] = useState(null); 
@@ -21,7 +22,7 @@ function ProfileViewer (props) {
     })
 
     return (
-        <Container>
+        <Container className="conversationprofilecontainer">
             <h3>Conversation Profile</h3>
             {(!pv_ul || !pv_ul.status) ? 
                 <Alert variant="danger">Error Loading User Profile!</Alert> :

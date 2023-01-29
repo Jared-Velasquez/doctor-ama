@@ -68,7 +68,7 @@ function ChatViewer (props) {
     const [draft, setDraft] = useState("");
 
     const handleMessageSend = async () => {
-        if (draft.length >= 0) {
+        if (draft.length > 0) {
             await sendMessage(props.convoID, draft, props.uid);
             console.log("Made API Call");
             const result = await loadConversation(props.convoID, PAGINATION_WINDOW);

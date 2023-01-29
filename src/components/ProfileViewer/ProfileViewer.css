@@ -1,4 +1,4 @@
-.profilecontainer {
+.conversationprofilecontainer {
     color:#e16972;
     font-weight: normal;
     background: linear-gradient(45deg, rgba(255, 255, 255, 0.62), #ababab42);
@@ -10,25 +10,5 @@
     z-index: 10;
     overflow-y: scroll;
     overflow-x: hidden;
-}
-
-.bigprofilecontainer {
-    padding: 0px;
-    margin: 0px;
-}
-
-.profilebutton {
-    margin-bottom: 10px;
-}
-
-.visibilitycolumn {
-    width: 50px;
-    border: 10px solid black;
-}
-
-.categorycolumn {
-    width: 60px;
-}
-
-.entrycolumn {
+    width: 50vw;
 }

@@ -101,7 +101,7 @@ function Registration(props) {
 
     const questions = getSignupQuestions();
 
-    const [intake, setIntake] = useState(questions.map((q) => {return {key: q, value: "", visible: true}}))
+    const [intake, setIntake] = useState(questions.map((q) => {return {key: q, value: "", visible: false}}))
     return (
         <Container className="registrationcontainer">
             <div>
