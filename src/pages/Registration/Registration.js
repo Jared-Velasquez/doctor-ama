@@ -14,7 +14,7 @@ function Registration(props) {
     const [remail, setRemail] = useState('');
     const [rpassword, setRpassword] = useState('');
 
-    const [nextFlow, setNextFlow] = useState(true);
+    const [nextFlow, setNextFlow] = useState(false);
 
     async function handleRegistrationSubmit(event) {
         event.preventDefault();

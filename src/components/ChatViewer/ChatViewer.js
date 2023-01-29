@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Container, Table, Row, Col, Form} from 'react-bootstrap';
 import './ChatViewer.css'
 
 // attribution time2TimeAgo: https://stackoverflow.com/questions/19540077/converting-unix-time-to-minutes-ago-in-javascript
@@ -90,10 +90,11 @@ function ChatViewer (props) {
         }
     ];
 
+    const [draft, setDraft] = useState("");
     return (
         <div>
             <Button onClick={()=>{props.exit()}}>Back</Button>
-            <Container className="overflow-scroll" style={{ height: '80vh' }}>
+            <Container className="overflow-auto" style={{ height: '80vh' }}>
                 {dummy_ml.map((m) => {
                     if(m.sender === props.uid) {
                         return <><p className="chatRight">{time2TimeAgo(m.timestamp)}</p><p className="chatBlue chatRight">{m.message}</p></>
@@ -103,7 +104,18 @@ function ChatViewer (props) {
                     }
                 })}
             </Container>
-            
+            <Container>
+                <Row>
+                    <Col  xs={9}>
+                        <Form.Control as="textarea" rows={1} placeholder="Send a message..."  onChange={((e) => {
+                            setDraft(e.target.value)
+                        })}/>
+                    </Col>
+                    <Col>
+                        <Button>&#11152;</Button>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     );
 }
