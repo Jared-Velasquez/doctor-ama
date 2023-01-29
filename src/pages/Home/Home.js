@@ -52,7 +52,7 @@ function Home (props) {
                 className="mb-3"
               >
                 <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ProfileViewer convoID={convoIDAct} />
+                  <ProfileViewer  />
                 </Tab>
                 <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                   <ProfileEditor />
@@ -77,13 +77,13 @@ function Home (props) {
                 className="mb-3"
               >
                 <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
-                  <ConversationList entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
+                  <ConversationList uid={uid} entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
                 <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
                   <CareFinder entry={()=>{setInConvo(true)}} setConvoIDAct={setConvoIDAct} />
                 </Tab>
               </Tabs>
-             : <ChatViewer uid={uid} exit={()=>{setInConvo(false)}} />}
+             : <ChatViewer convoID={convoIDAct} uid={uid} exit={()=>{setInConvo(false)}} />}
         </Col>
       </Row>
         </Container>

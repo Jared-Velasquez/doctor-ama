@@ -46,10 +46,12 @@ function CareFinder (props) {
     });
 
     async function makeAndSwitchChat(userID) {
-        const convoID = await initializeConversation(userID);
-        console.log("Made API Call");
-        props.setConvoIDAct(convoID);
-        props.entry();
+        const result = await initializeConversation(userID);
+        if(result.status) {
+            console.log("Made API Call");
+            props.setConvoIDAct(result.result);
+            props.entry();
+        }
     }
 
     if(!cf_dl || !(cf_dl?.status) || cf_dl?.result?.length === 0) {
@@ -91,7 +93,7 @@ function CareFinder (props) {
                                 <p class="doctorlist-pronouns">{"pronouns: " + currpronoun}</p>
                             </td>
                             <td>
-                                <Button variant="success">Chat!</Button>{' '}
+                                <Button variant="success" onClick={async ()=> {await makeAndSwitchChat(doctor.userID)}}>Chat!</Button>{' '}
                             </td>
                             <td></td> <td></td> <td></td>
                         </tr>

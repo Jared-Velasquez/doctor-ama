@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { getUserConversations, markRead } from '../../firebase/database';
 import { Badge } from 'react-bootstrap';
 import './ConversationList.css';
 
@@ -37,28 +38,35 @@ function time2TimeAgo(ts) {
 }
 
 function ConversationList (props) {
-    const dummy_cl = {
-        status: "boolean",
-        result: [
-            {convoID: "afjfieopjefaopi", unread: false, displayName: "Jor briun",
-                icon: "<string image link>?? idk", timestamp: 1674955189943},
-            {convoID: "ajefpoiajpaesop", unread: true, displayName: "Anonymous Rabbit",
-                icon: "<string image link>?? idk", timestamp: 1674955209943},
-            {convoID: "ajefoijaepjpoai", unread: false, displayName: "Foo bar",
-                icon: "<string image link>?? idk", timestamp: 1674955199943}
-          ]
+    const [cll, set_Cll] = useState();
+
+    useEffect(() => {
+        console.log(props.uid);
+        getConversationsWrapper().catch(console.error);
+        const interval = setInterval(() => getConversationsWrapper().catch(console.error), 15000)
+        return () => {
+          clearInterval(interval);
         }
-        if(!dummy_cl.status || dummy_cl.result?.length === 0) {
+    }, [props.uid])
+
+    const getConversationsWrapper = useCallback(async () => {
+        const result = await getUserConversations(props.uid);
+        console.log("made getConversations API call");
+        set_Cll(result);
+    })
+
+        if(!cll | !cll?.status || cll?.result?.length === 0) {
             return (
                 <p class="doctorlist-centermsg">No conversations... yet &#128532;</p>
             )
         }
         return (
             <div class="convolist-overall">
-                {dummy_cl.result.map((convo, i) => {
+                {cll.result.map((convo, i) => {
                     return (
                         <div class="convolist-pad">
-                        <table class="convolist-entry" onClick={props.entry}>
+                        <table class="convolist-entry" onClick={async () => {
+                            props.setConvoIDAct(convo.conversationID); await markRead(convo.conversationID, props.uid); props.entry()}}>
                             <tr>
                                 <td class="convolist-td">
                                     <img src={convo.icon} class="convolist-image"/>
