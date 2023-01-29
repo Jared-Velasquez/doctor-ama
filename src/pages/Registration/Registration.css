@@ -1,3 +1,21 @@
-.loginbutton {
-    float: right
+.registrationcontainer {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(45deg, #f5ccd0,#ffffff, #78bfa1);
+    padding: 0px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.registrationA {
+    color:#e16972;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.62), #5c9a6942);
+    border-radius: 20px;
+    height: 90vh;
+    padding: 60px;
+    box-shadow: 0px 0px 10px 10px rgba(84, 84, 84, 0.315);
+    margin: 0px 20px 0px 20px;
+    backdrop-filter: blur(10px);
+    z-index: 10;
 }
