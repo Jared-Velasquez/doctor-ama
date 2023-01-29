@@ -7,16 +7,20 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {Link} from 'react-router-dom';
 import "./Login.css"
+import {  useNavigate } from "react-router-dom";
+
 
 function Login(props) {
     const [lemail, setLemail] = useState('');
     const [lpassword, setLpassword] = useState('');
+    const navigate = useNavigate();
+
 
     async function handleLoginSubmit(event) {
         event.preventDefault();
         if(await signInUser(lemail, lpassword)){
             alert("Successfully logged in!");
-            window.location = "/";
+            navigate("/");
         }
         else {
             alert("Something didn't work...");
