@@ -17,7 +17,8 @@ const initializeUser = async (userID, userType, specialities) => {
 
     return {
         status: true,
-        result: "User was successfully added to Firestore Database and Authentication"
+        result: "User was successfully added to Firestore Database and Authentication",
+        id: userID,
     }
 }
 

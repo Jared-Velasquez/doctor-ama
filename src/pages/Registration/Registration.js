@@ -1,6 +1,6 @@
 import React, { useState, Slider, useEffect, useCallback} from 'react';
 import {makeUser} from "../../firebase/account"
-import {uploadImage} from '../../firebase/database.js';
+import {setProfile, uploadImage} from '../../firebase/database.js';
 import { Alert, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -11,6 +11,7 @@ import "./Registration.css"
 import Avatar, { genConfig } from 'react-nice-avatar'
 import html2canvas from 'html2canvas';
 import {getSignupQuestions} from '../../utilities/utilities.js';
+import {  useNavigate } from "react-router-dom";
 
 function Registration(props) {
     
@@ -35,6 +36,8 @@ function Registration(props) {
     const [shirtcolor, setshirtcolor] = useState("#FC909F");
     const [bgcolor, setbgcolor] = useState("#9287FF");
 
+    const [userID, setUserID] = useState("");
+
     const[config, setConfig] = useState({
         "faceColor": "#F9C9B6",
         "earSize": "big",
@@ -51,6 +54,8 @@ function Registration(props) {
         "shirtColor": "#FC909F",
         "bgColor": "#9287FF"
     })
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setConfig({
@@ -75,14 +80,20 @@ function Registration(props) {
 
     const [nextFlow, setNextFlow] = useState(false);
 
+    async function handleHealthProfileSubmit(event) {
+        event.preventDefault();
+        await setProfile(userID, intake);
+        navigate("/");
+    }
+
     async function handleRegistrationSubmit(event) {
         event.preventDefault();
         let testvar = await makeUser(remail, rpassword)
+        setUserID(testvar.id);
         console.log(testvar);
         if(testvar){
             alert("Successfully Registered!");
             setNextFlow(true);
-            //window.location = "/";
         }
         else {
             alert("Something didn't work...");
@@ -140,7 +151,7 @@ function Registration(props) {
                         )
                     })}
                     </Form>
-                    <Button variant='success'>Submit</Button>
+                    <Button variant='success' onClick={handleHealthProfileSubmit}>Submit</Button>
                     </>}
                 </Col>
                 <Col className="registrationB">
