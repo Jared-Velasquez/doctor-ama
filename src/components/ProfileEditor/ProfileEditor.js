@@ -43,14 +43,14 @@ function ProfileEditor (props) {
                     {m_data?.result.map((pair, i) => {
                         return (
                         <tr>
-                            <td><input type="checkbox" checked={pair.visible} onChange={() => {
+                            <td className='visibilitycolumn'><input type="checkbox" checked={pair.visible} onChange={() => {
                                 var copy = {...m_data};
                                 copy.result[i].visible = !pair.visible;
                                 setM_data(copy);
 
                             }} /> Visibility</td>
-                            <td>{pair.key}</td>
-                            <td>
+                            <td className='categorycolumn'>{pair.key}</td>
+                            <td className='entrycolumn'>
                                 <input type="text" value={pair.value} onChange={(e) => {
                                     var copy = {...m_data};
                                     copy.result[i].value = e.target.value;
@@ -68,9 +68,9 @@ function ProfileEditor (props) {
                 <tbody>
                     {m_data?.result.map((pair) => {return(
                         <tr>
-                            <td>{pair.visible ? <>&#x2713; Visible</> : <>&#x2717; Hidden</>}</td>
-                            <td>{pair.key}</td>
-                            <td>{pair.value}</td>
+                            <td className="visibilitycolumn">{pair.visible ? <>&#x2713; Visible</> : <>&#x2717; Hidden</>}</td>
+                            <td className="categorycolumn">{pair.key}</td>
+                            <td className="entrycolumn">{pair.value}</td>
                         </tr>
                     );
                     })
