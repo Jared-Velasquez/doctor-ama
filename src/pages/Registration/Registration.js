@@ -91,7 +91,7 @@ function Registration(props) {
         setUserID(testvar.id);
         console.log(testvar);
         if(testvar){
-            alert("Successfully Registered!");
+            //alert("Successfully Registered!");
             setNextFlow(true);
         }
         else {
