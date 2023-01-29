@@ -94,7 +94,7 @@ function ChatViewer (props) {
     return (
         <div>
             <Button onClick={()=>{props.exit()}}>Back</Button>
-            <Container className="overflow-auto" style={{ height: '80vh' }}>
+            <Container className="overflow-auto" style={{ height: '75vh' }}>
                 {dummy_ml.map((m) => {
                     if(m.sender === props.uid) {
                         return <><p className="chatRight">{time2TimeAgo(m.timestamp)}</p><p className="chatBlue chatRight">{m.message}</p></>

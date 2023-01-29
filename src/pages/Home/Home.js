@@ -32,8 +32,10 @@ function Home (props) {
 
     return (
         <Container className="pt-4">
-            <p>User ID is: {uid}</p>
-            <Button variant="danger" className="float-end">Log Out</Button>
+            <Row><Col><p>User ID is: {uid}</p></Col>
+            <Col><Button variant="danger" className="float-end">Log Out</Button>
+</Col></Row>
+            
         <Row>
         <Col>
             {inConvo ? 
@@ -42,10 +44,10 @@ function Home (props) {
                 transition={false}
                 className="mb-3"
               >
-                <Tab eventKey="def" title="Conversation Details">
+                <Tab eventKey="def" title="Conversation Details" className="overflow-auto" style={{ height: '75vh' }}>
                   <ProfileViewer />
                 </Tab>
-                <Tab eventKey="mine" title="My Profile">
+                <Tab eventKey="mine" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                   <ProfileEditor />
                 </Tab>
               </Tabs>
@@ -55,7 +57,7 @@ function Home (props) {
              transition={false}
              className="mb-3"
            >
-             <Tab eventKey="def" title="My Profile">
+             <Tab eventKey="def" title="My Profile" className="overflow-auto" style={{ height: '75vh' }}>
                <ProfileEditor />
              </Tab>
            </Tabs>}
@@ -67,10 +69,10 @@ function Home (props) {
                 transition={false}
                 className="mb-3"
               >
-                <Tab eventKey="convlist" title="Conversations">
+                <Tab eventKey="convlist" title="Conversations" className="overflow-auto" style={{ height: '75vh' }}>
                   <ConversationList entry={()=>{setInConvo(true)}} />
                 </Tab>
-                <Tab eventKey="find" title="Find Care Professionals">
+                <Tab eventKey="find" title="Find Care Professionals" className="overflow-auto" style={{ height: '75vh' }}>
                   <CareFinder />
                 </Tab>
               </Tabs>
