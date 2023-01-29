@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Button, Alert, Table, Container, ToggleButton, Row, Col } from 'react-bootstrap';
 import { getOwnProfile, setProfile } from '../../firebase/database';
+import './ProfileEditor.css'
 
 function ProfileEditor (props) {
     const [editMode, setEditMode] = useState(false);
@@ -26,13 +27,13 @@ function ProfileEditor (props) {
     }
 
     return (
-        <Container>
-        <h3>My Profile</h3>
+        <Container className="profilecontainer">
+        <h3>My Medical Profile</h3>
 
         <Container>
-            <ToggleButton checked={editMode}  variant="outline-primary"
+            <ToggleButton className='profilebutton' checked={editMode}  variant="outline-primary"
             onClick={() => {setEditMode(!editMode); setM_data(orig_data)}}>{editMode ? "Cancel" : "Edit"}</ToggleButton>{' '}
-            {editMode ? <Button variant="success" onClick={handleSave}>Save</Button>: null}
+            {editMode ? <Button className='profilebutton' variant="success" onClick={handleSave}>Save</Button>: null}
         </Container>
         {!m_data?.status ? 
             <Alert variant="danger">Error Loading Your Profile!</Alert> :
