@@ -54,7 +54,7 @@ function ProfileEditor (props) {
                 <tbody>
                     {m_data?.result.map((pair) => {return(
                         <tr>
-                            <td>{pair.visible ? "Visible" : "Hidden"}</td>
+                            <td>{pair.visible ? <>&#x2713; Visible</> : <>&#x2717; Hidden</>}</td>
                             <td>{pair.key}</td>
                             <td>{pair.value}</td>
                         </tr>

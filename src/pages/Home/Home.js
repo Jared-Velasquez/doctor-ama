@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
 import CareFinder from '../../components/CareFinder/CareFinder';
 import ChatViewer from '../../components/ChatViewer/ChatViewer';
 import ConversationList from '../../components/ConversationList/ConversationList';
@@ -33,6 +33,7 @@ function Home (props) {
     return (
         <Container className="pt-4">
             <p>User ID is: {testing}</p>
+            <Button variant="danger" className="float-end">Log Out</Button>
         <Row>
         <Col>
             {inConvo ? 
