@@ -14,14 +14,15 @@ import {
   getUserId,
   userLoggedIn,
 } from "./firebase/account"
-import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sendMessage } from './firebase/database.js';
+import { getOwnProfile, getOtherProfile, setProfile, initializeConversation, sendMessage, loadConversation } from './firebase/database.js';
 
 
 
 function App() {
   useEffect(() => {
     //initializeConversationWrapper().catch(console.error);
-    userSendMessageWrapper().catch(console.error);
+    //userSendMessageWrapper().catch(console.error);
+    paginationWrapper().catch(console.error);
   }, [])
 
   const initializeConversationWrapper = useCallback(async () => {
@@ -34,6 +35,12 @@ function App() {
   const userSendMessageWrapper = useCallback(async () => {
     const sentMessage = await sendMessage("zcshUaxclcxWvd9XhlDE", "This is the doctor sending a third message!", "LltZTPMghitfupPlqXf8SXatY2");
     console.log(sentMessage);
+  })
+
+  const paginationWrapper = useCallback(async () => {
+    //await loadConversation("zcshUaxclcxWvd9XhlDE", 5);
+    const result = await loadConversation("zcshUaxclcxWvd9XhlDE", 5, "HLs98cqE1vdkuInS2xOK");
+    console.log(result);
   })
 
   return (
