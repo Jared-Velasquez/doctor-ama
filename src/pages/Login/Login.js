@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import {signInUser, makeUser} from "../../firebase/account"
+import {signInUser} from "../../firebase/account"
 import { Alert, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import {Link} from 'react-router-dom';
 import "./Login.css"
 
 function Login(props) {
@@ -44,8 +45,9 @@ function Login(props) {
                         <Form.Control type="password" placeholder="Password" value={lpassword} onChange={(e) => setLpassword(e.target.value)}/>
                     </Form.Group>
                     <Button variant="success" type="submit">
-                    Submit
+                    Log In
                     </Button>
+                    <Button as={Link} className="registerbutton" to="/registration">Register</Button>
                 </Form>
             </Col>
         </Row>
