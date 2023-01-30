@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap';
+import { Container, Row, Col, Tabs, Tab, Button, Spinner } from 'react-bootstrap';
 import CareFinder from '../../components/CareFinder/CareFinder';
 import ChatViewer from '../../components/ChatViewer/ChatViewer';
 import ConversationList from '../../components/ConversationList/ConversationList';
@@ -16,7 +16,7 @@ import { getUsersFromConversation } from '../../firebase/database';
 
 function Home (props) {
     let [inConvo, setInConvo] = useState(false);
-    let [uid, setUid] = useState('loading..');
+    let [uid, setUid] = useState(null);
     const navigate = useNavigate();
 
     let [convoIDAct, setConvoIDAct] = useState(null);
@@ -57,8 +57,13 @@ function Home (props) {
         console.log("Call getUsersFromConversation API");
     })
 
-
-    return (
+    if (uid === null || convoUID===null) return (
+        <Container className="home-wait">
+            <h2>Doctor AMA</h2>
+            <Spinner animation="grow" variant="success" />
+        </Container>
+    )
+    else return (
         <Container fluid className="pt-4">
           <div>
             <img class="monstera3 monstera" src="https://static.vecteezy.com/system/resources/previews/009/974/134/original/cutout-monstera-leaf-watercolor-simplicity-painting-free-png.png" />
